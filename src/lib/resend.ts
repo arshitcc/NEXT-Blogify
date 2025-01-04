@@ -8,10 +8,10 @@ export async function sendVerificationEmail(
   verificationCode: string
 ) {
   try {
-    const x = await resend.emails.send({
+    await resend.emails.send({
       from: "onboarding@resend.dev",
       to: [email],
-      subject: "",
+      subject: "Blogify Verification Code",
       react: EmailTemplate({ verify: { email, verificationCode } }),
     });
 

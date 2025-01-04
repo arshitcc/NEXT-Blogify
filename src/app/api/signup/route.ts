@@ -7,18 +7,7 @@ export async function POST(req: Request) {
   await connectDB();
 
   try {
-    const { username, email, password } = await req.json();
-
-    const isExistingUsername = await User.findOne({ username });
-    if(isExistingUsername) {
-      return Response.json(
-        {
-          success: false,
-          message: "Username already taken",
-        },
-        { status: 400 }
-      );
-    }
+    const { email, password } = await req.json();
 
     const isExistingUser = await User.findOne({ email });
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -38,7 +27,6 @@ export async function POST(req: Request) {
         isExistingUser.password = hashedPassword;
         isExistingUser.verificationCode = verificationCode;
         isExistingUser.verificationCodeExpiry = new Date(Date.now() + 15 * 60 * 1000);
-        isExistingUser.username = username;
         await isExistingUser.save();
       }
     } 
@@ -46,7 +34,7 @@ export async function POST(req: Request) {
       const hashedPassword = await bcrypt.hash(password, 10);
       const verificationCodeExpiry = new Date(Date.now() + 15 * 60 * 1000);
       const user = await User.create({
-        username,
+        username : email.split("@")[0],
         email,
         password: hashedPassword,
         verificationCode,
