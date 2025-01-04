@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     phone: {
       type: String,
-      required: true,
       unique: true,
     },
     password: {
@@ -64,4 +63,4 @@ const userSchema = new mongoose.Schema<IUser>(
   { timestamps: true }
 );
 
-export const User = mongoose.model('users',userSchema);
+export const User = mongoose.models.users || mongoose.model('users',userSchema);
