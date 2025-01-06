@@ -27,6 +27,7 @@ export async function POST(req: Request) {
         isExistingUser.password = hashedPassword;
         isExistingUser.verificationCode = verificationCode;
         isExistingUser.verificationCodeExpiry = new Date(Date.now() + 15 * 60 * 1000);
+        isExistingUser.username = email.split("@")[0];
         await isExistingUser.save();
       }
     } 
