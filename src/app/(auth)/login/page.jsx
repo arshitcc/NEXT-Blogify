@@ -2,11 +2,13 @@
 
 import React, { useState } from "react";
 import { signIn, useSession, signOut } from "next-auth/react";
+import { useToast } from "@/hooks/use-toast";
 
 const page = () => {
   const [user, setUser] = useState();
   const [password, setPassword] = useState();
   const session = useSession();
+  const {toast} = useToast();
   if(session.status === "authenticated"){
     return (
       <>
@@ -20,11 +22,25 @@ const page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signIn("credentials", {
+    const res = await signIn("credentials", {
       redirect: false,
       user,
       password,
     });
+    if(res.ok){
+      toast({
+        title: "Success",
+        description: "Login successful",
+        variant: "success",
+      }) 
+    }
+    else  {
+      toast({
+        title: "Error",
+        description: res.error,
+        variant: "destructive",
+      })
+    }
   };
 
   return (
