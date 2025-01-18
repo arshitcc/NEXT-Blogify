@@ -7,10 +7,10 @@ export interface IUser {
   username: string;
   email: string;
   phone: string;
-  role: string;
+  role?: string;
   isVerified: boolean;
-  verificationCode: string;
-  verificationCodeExpiry: Date;
+  verificationCode?: string;
+  verificationCodeExpiry?: Date;
   avatar: string;
 }
 
