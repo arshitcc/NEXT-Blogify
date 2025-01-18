@@ -1,0 +1,25 @@
+{
+  "blogs": [
+    {
+      "id": 1,
+      "title": "Tips for Writing Engaging Content",
+      "description": "Discover how to craft compelling blog posts that keep readers hooked. These tips will elevate your writing game.",
+      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2560&auto=format&fit=crop",
+      "link": "Read More"
+    },
+    {
+      "id": 2,
+      "title": "Mastering the Art of Minimalism",
+      "description": "Learn how minimalism can transform your life and mindset. Dive into practical tips and real-world examples.",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2560&auto=format&fit=crop",
+      "link": "Explore Now"
+    },
+    {
+      "id": 3,
+      "title": "The Future of Web Development",
+      "description": "Stay ahead of the curve with insights into the latest web development trends shaping the digital world.",
+      "image": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=2560&auto=format&fit=crop",
+      "link": "Discover More"
+    }
+  ]
+}
