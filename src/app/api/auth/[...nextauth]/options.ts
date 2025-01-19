@@ -81,7 +81,7 @@ export const AuthOptions: NextAuthOptions = {
         }
         return session;
     },
-    async signIn({ account, profile }) {
+    async signIn({ account, profile, user }) {
       await connectDB();
       if (account?.provider === "google" || account?.provider === "github") {
         const user = await User.findOne({ email: profile?.email });
@@ -102,6 +102,9 @@ export const AuthOptions: NextAuthOptions = {
           });
           return true;
         }
+      }
+      if(account?.provider === "credentials" && user){
+        return true;
       }
       return false;
     }
