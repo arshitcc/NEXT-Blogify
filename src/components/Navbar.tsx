@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
 import { MenuIcon, X } from 'lucide-react'
+import { signOut } from 'next-auth/react'
 
 export function Navbar() {
   const { data: session } = useSession()
@@ -30,6 +31,7 @@ export function Navbar() {
               <NavLink href="/about">About</NavLink>
               <NavLink href="/contact">Contact</NavLink>
               <NavLink href="/explore">Explore</NavLink>
+              <NavLink href="/profile">Profile</NavLink>
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -38,8 +40,9 @@ export function Navbar() {
                 className="px-4 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => signOut()}
               >
-                Dashboard
+                Logout
               </motion.button>
             ) : (
               <>
@@ -85,6 +88,7 @@ export function Navbar() {
           <MobileNavLink href="/about">About</MobileNavLink>
           <MobileNavLink href="/contact">Contact</MobileNavLink>
           <MobileNavLink href="/explore">Explore</MobileNavLink>
+          <MobileNavLink href="/profile">Profile</MobileNavLink>
         </div>
       </motion.div>
     </nav>
