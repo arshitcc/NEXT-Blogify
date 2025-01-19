@@ -2,14 +2,14 @@ import mongoose, { Document } from "mongoose";
 
 export interface IComment extends Document {
   _id: mongoose.Types.ObjectId;
-  postId: mongoose.Types.ObjectId;
+  blogId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
   comment: string;
 }
 
 const commentSchema = new mongoose.Schema<IComment>(
   {
-    postId: {
+    blogId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Blog",
       required: true,
