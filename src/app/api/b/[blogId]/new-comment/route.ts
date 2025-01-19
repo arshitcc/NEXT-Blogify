@@ -3,13 +3,14 @@ import { connectDB } from "@/lib/db";
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { AuthOptions } from "@/app/api/auth/[...nextauth]/options";
 
 export const POST = async (req: NextRequest, context: any) => {
   // add Comment
   try {
     await connectDB();
 
-    const session = await getServerSession();
+    const session = await getServerSession(AuthOptions);
     if (!session) {
       return NextResponse.json(
         { success: false, message: "Unauthorized", data: {} },

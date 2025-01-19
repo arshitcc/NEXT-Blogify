@@ -4,25 +4,11 @@ import { getServerSession } from "next-auth";
 import { AuthOptions } from "../../auth/[...nextauth]/options";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { isValidObjectId } from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 
 export const GET = async (req: NextRequest, context : any, res:NextResponse) => {
   // get user profile
-  
-  const session = await getServerSession(AuthOptions);
-  
-  if (!session) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Unauthorized Access. Please Login",
-        data: {},
-      },
-      { status: 401 }
-    );
-  }
-
-  const {userId} = context.params;
+  const { userId } = await context.params;
   if(!isValidObjectId(userId)){
     return NextResponse.json(
       { success: false, message: "Invalid User ID", data: {} },
@@ -35,7 +21,7 @@ export const GET = async (req: NextRequest, context : any, res:NextResponse) => 
     const user = await User.aggregate([
       {
         $match : {
-          _id : userId
+          _id : new mongoose.Types.ObjectId(userId)
         }
       },
       {
@@ -48,13 +34,14 @@ export const GET = async (req: NextRequest, context : any, res:NextResponse) => 
       },
       {
         $project : {
+          email: 0,
           password : 0,
           verificationCode : 0,
           verificationCodeExpiry : 0
         }
       }
     ])
-    if (!user) {
+    if (!user.length) {
       return NextResponse.json(
         { success: false, message: "User not found", data: {} },
         { status: 404 }
@@ -62,7 +49,7 @@ export const GET = async (req: NextRequest, context : any, res:NextResponse) => 
     }
 
     return NextResponse.json(
-      { success: true, message: "User found", data: user },
+      { success: true, message: "User found", data: user[0] },
       { status: 200 }
     );
   } catch {
@@ -106,7 +93,7 @@ export const PATCH = async (req: Request) => {
       { _id: session.user._id },
       { password: hashedPassword },
       { new: true }
-    );
+    ).select('-password -verificationCode -verificationCodeExpiry');
 
     if (!user) {
       return NextResponse.json(
