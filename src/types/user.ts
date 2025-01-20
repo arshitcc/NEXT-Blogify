@@ -28,4 +28,5 @@ export interface IUserState {
   signup: (data: Omit<z.infer<typeof signupSchema>,'confirmPassword'>) => Promise<boolean>;
   login: (method: loginMethod, data?: z.infer<typeof loginSchema>) => Promise<void>;
   logout: () => Promise<void>;
+  getProfile: (userId: string) => Promise<void>;
 }

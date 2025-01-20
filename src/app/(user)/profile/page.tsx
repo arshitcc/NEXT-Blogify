@@ -5,40 +5,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-
-const user = {
-  _id: "1",
-  username: "johndoe",
-  email: "john@example.com",
-  phone: "1234567890",
-  role: "user",
-  isVerified: true,
-  avatar: "https://avatars.githubusercontent.com/u/118971735?v=4",
-};
-
-const blogs = [
-  {
-    _id: "1",
-    thumbnail: "",
-    title: "My First Blog",
-    slug: "",
-    body: "This is the content of my first blog...",
-    views: 3,
-    postedBy: "1",
-  },
-  {
-    _id: "2",
-    thumbnail: "",
-    title: "Another Great Blog",
-    slug: "",
-    body: "This is the content of another great blog...",
-    views: 12,
-    postedBy: "1",
-  },
-];
-
+import { useUserStore } from "@/store/useUserStore";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { IBlog } from "@/types/blog";
 
 const page = () => {
+  const { isLoading, error, profile, getProfile } = useUserStore();
+  const { data : session } = useSession();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      await getProfile(session?.user?._id);
+    };
+    if(session?.user?._id){
+      fetchProfile();
+    }
+  },[session]);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -49,16 +33,16 @@ const page = () => {
           </CardHeader>
           <CardContent className="flex flex-col items-center">
             <Avatar className="w-32 h-32 mb-4">
-              <AvatarImage src={user.avatar} alt={user.username} />
+              <AvatarImage src={profile.avatar} alt={profile.username} />
               <AvatarFallback>
-                {user.username.slice(0, 2).toUpperCase()}
+                {profile?.username}
               </AvatarFallback>
             </Avatar>
-            <h2 className="text-2xl font-bold mb-2">{user.username}</h2>
-            <p className="text-gray-600 mb-2">{user.email}</p>
-            <p className="text-gray-600 mb-2">{user.phone}</p>
-            <Badge variant={user.isVerified ? "default" : "secondary"}>
-              {user.isVerified ? "Verified" : "Unverified"}
+            <h2 className="text-2xl font-bold mb-2">{profile.username}</h2>
+            {profile.email && <p className="text-gray-600 mb-2">{profile.email}</p>}
+            {profile.phone && <p className="text-gray-600 mb-2">{profile.phone}</p>}
+            <Badge variant={profile.isVerified ? "default" : "secondary"}>
+              {profile.isVerified ? "Verified" : "Unverified"}
             </Badge>
           </CardContent>
         </Card>
@@ -67,7 +51,7 @@ const page = () => {
         <div className="md:col-span-2">
           <h2 className="text-2xl font-bold mb-4">My Blogs</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {blogs.map((blog) => (
+            {profile?.blogs.map((blog : IBlog) => (
               <Card key={blog._id.toString()} className="flex flex-col">
                 <Image
                   src={blog.thumbnail || "/placeholder.svg"}
@@ -78,7 +62,7 @@ const page = () => {
                 />
                 <CardContent className="flex-grow">
                   <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">{blog.body}</p>
+                  <p className="text-gray-600 mb-4 line-clamp-3">{blog.body.toString()}</p>
                   <Link
                     href={`/blog/${blog._id}`}
                     className="text-blue-500 hover:underline"

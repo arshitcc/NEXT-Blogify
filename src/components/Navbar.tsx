@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
-import { MenuIcon, X } from 'lucide-react'
+import { MenuIcon, Plus, X } from 'lucide-react'
 import { useUserStore } from '@/store/useUserStore'
 import { useRouter } from 'next/navigation'
 
@@ -35,6 +35,14 @@ export function Navbar() {
               <NavLink href="/contact">Contact</NavLink>
               <NavLink href="/explore">Explore</NavLink>
               {session && <NavLink href="/profile">Profile</NavLink>}
+              {session && 
+                <NavLink href="/blog/new">
+                  <div className='flex justify-center items-center gap-2'>
+                    <Plus/> 
+                    <p>New Post</p>
+                  </div>
+                </NavLink>
+              }
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -94,6 +102,14 @@ export function Navbar() {
           <MobileNavLink href="/contact">Contact</MobileNavLink>
           <MobileNavLink href="/explore">Explore</MobileNavLink>
           {session && <MobileNavLink href="/profile">Profile</MobileNavLink>}
+          {session && (
+            <MobileNavLink href="/blog/new">
+              <div className='flex gap-2'>
+                <Plus/> 
+                <p>New Post</p>
+              </div>
+            </MobileNavLink>
+          )}
 
           {session && (
             <motion.button

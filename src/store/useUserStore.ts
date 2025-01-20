@@ -52,6 +52,17 @@ const userStore: StateCreator<IUserState> = (set) => ({
         set({ isLoading: false });
     }
   },
+  getProfile: async (userId) => {
+    set({ isLoading: true });
+    try {
+      const res = await axios.get(`api/u/${userId}`);
+      set({ profile: res.data.data });
+    } catch (error : any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  }
 });
 
 export const useUserStore = create<IUserState>()(
