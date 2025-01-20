@@ -10,13 +10,13 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/profile', req.url));
     }
   }
-
-  if(!token && (pathname.startsWith('/profile') || pathname.startsWith('/api/u') || pathname.startsWith('/api/b'))){
+  console.log(pathname)
+  if(!token && (pathname.startsWith('/profile') || pathname.startsWith('/blog/new') || pathname.startsWith('/api/u') || pathname.startsWith('/api/b'))){
     return NextResponse.redirect(new URL('/login', req.url));
   }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/login", "/signup", "/", "/verify/:path*", "/profile", "/api/:path*"],
+  matcher: ["/login", "/signup", "/", "/verify/:path*", "/profile", "/api/:path*", "/blog/new"],
 };
