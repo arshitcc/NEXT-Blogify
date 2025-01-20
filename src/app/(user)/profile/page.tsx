@@ -39,14 +39,14 @@ const page = () => {
             ) : (
               <>
                 <Avatar className="w-32 h-32 mb-4">
-                  <AvatarImage src={profile.avatar} alt={profile.username} />
+                  <AvatarImage src={profile?.avatar} alt={profile?.username} />
                   <AvatarFallback>{profile?.username}</AvatarFallback>
                 </Avatar>
-                <h2 className="text-2xl font-bold mb-2">{profile.username}</h2>
-                {profile.email && <p className="text-gray-600 mb-2">{profile.email}</p>}
-                {profile.phone && <p className="text-gray-600 mb-2">{profile.phone}</p>}
-                <Badge variant={profile.isVerified ? "default" : "secondary"}>
-                  {profile.isVerified ? "Verified" : "Unverified"}
+                <h2 className="text-2xl font-bold mb-2">{profile?.username}</h2>
+                {profile?.email && <p className="text-gray-600 mb-2">{profile?.email}</p>}
+                {profile?.phone && <p className="text-gray-600 mb-2">{profile?.phone}</p>}
+                <Badge variant={profile?.isVerified ? "default" : "secondary"}>
+                  {profile?.isVerified ? "Verified" : "Unverified"}
                 </Badge>
               </>
             )}
@@ -56,8 +56,8 @@ const page = () => {
         {/* Blogs List */}
         {isLoading ? (
           <BlogsSkeleton />
-        ) : profile?.blogs && profile.blogs.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        ) : profile?.blogs && profile?.blogs.length > 0 ? (
+          <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {profile?.blogs.map((blog : IBlog) => (
               <Card key={blog._id.toString()} className="flex flex-col">
                 <Image
@@ -70,7 +70,7 @@ const page = () => {
                 <CardContent className="flex-grow">
                   <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
                   <p className="text-gray-600 mb-4 line-clamp-3">{blog.body.toString()}</p>
-                  <Link href={`/blog/${blog._id}`} className="text-blue-500 hover:underline">
+                  <Link href={`/b/${blog._id}`} className="text-blue-500 hover:underline">
                     Read More
                   </Link>
                 </CardContent>

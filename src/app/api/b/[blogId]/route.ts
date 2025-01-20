@@ -1,6 +1,6 @@
 import { Blog } from "@/models/blogs.models";
 import { connectDB } from "@/lib/db";
-import { isValidObjectId } from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest, context: any) => {
@@ -17,7 +17,7 @@ export const GET = async (req: NextRequest, context: any) => {
 
     const updatedBlog = await Blog.findOneAndUpdate(
       { _id: blogId },
-      { $set: { views: { $inc: 1 } } },
+      { $inc: { views: 1 } },
       { new: true }
     );
 
@@ -31,7 +31,7 @@ export const GET = async (req: NextRequest, context: any) => {
     const blog = await Blog.aggregate([
       {
         $match: {
-          _id: blogId,
+          _id: new mongoose.Types.ObjectId(blogId),
         },
       },
       {
@@ -54,15 +54,15 @@ export const GET = async (req: NextRequest, context: any) => {
       },
     ]);
 
-    if (!blog) {
+    if (!blog.length) {
       return NextResponse.json(
         { success: false, message: "Blog not found", data: {} },
         { status: 404 }
       );
     }
-
+    
     return NextResponse.json(
-      { success: true, message: "Blog found", data: blog },
+      { success: true, message: "Blog found", data: blog[0] },
       { status: 200 }
     );
   } catch (error) {

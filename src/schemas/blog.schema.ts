@@ -19,6 +19,7 @@ export const blogSchema = z.object({
     .string()
     .min(20, "Body content must be at least 20 characters long")
     .max(10000, "Body content cannot exceed 10,000 characters"),
+  isActive : z.boolean(),
 });
 
 export type Blog = z.infer<typeof blogSchema>

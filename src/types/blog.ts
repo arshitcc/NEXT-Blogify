@@ -1,3 +1,6 @@
+import { blogSchema } from "@/schemas/blog.schema";
+import { z } from "zod";
+
 export interface IBlog {
   _id: string;
   thumbnail: string;
@@ -6,6 +9,7 @@ export interface IBlog {
   body: string;
   views: number;
   postedBy: string;
+  isActive: boolean;
 }
 
 export interface IComment {
@@ -29,9 +33,9 @@ export interface IBlogState {
   error: string;
   blogs: IBlog[];
 
-  getBlog : (blogId: string) => Promise<void>;
-  createBlog : (blog: IBlog) => Promise<void>;
-  updateBlog : (blog: IBlog) => Promise<void>;
-  deleteBlog : (id: string) => Promise<void>;
+  getBlog : (blogId: string, userId : string) => Promise<void>;
+  createBlog : (blogData: Partial<z.infer<typeof blogSchema>>, userId : string) => Promise<boolean>;
+  updateBlog : (blog: IBlog, userId : string) => Promise<boolean>;
+  deleteBlog : (blogId: string, userId: string) => Promise<boolean>;
 }
 

@@ -8,18 +8,17 @@ export interface IBlog extends Document {
   body: string;
   views: number;
   postedBy: mongoose.Types.ObjectId;
+  isActive: boolean;
 }
 
 const blogSchema = new mongoose.Schema<IBlog>(
   {
     thumbnail: {
       type: String,
-      required: true,
       default: "",
     },
     title: {
       type: String,
-      required: true,
     },
     slug: {
       type: String,
@@ -37,6 +36,10 @@ const blogSchema = new mongoose.Schema<IBlog>(
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+    },
+    isActive: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

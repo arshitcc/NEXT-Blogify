@@ -1,27 +1,43 @@
-'use client'
+"use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {RTE} from "./BlogEditor/RTE";
+import { RTE } from "./BlogEditor/RTE";
 import { BlogPreview } from "./BlogPreview/BlogPreview";
-import { IBlog } from "@/models/blogs.models";
+import { IBlog } from "@/types/blog";
 
+const Editor = ({ blog }: { blog?: IBlog }) => {
+  const [post, setPost] = useState<Partial<IBlog>>({
+    title: blog?.title || "",
+    body: blog?.body || "",
+    thumbnail: blog?.thumbnail || "",
+    isActive: blog?.isActive || false,
+  });
 
-const Editor = ({blog} : {blog?: IBlog}) => {
-
-  const [content, setContent] = React.useState<string>("");
+  const [tab, setTab] = useState<string>("editor");
 
   return (
-    <div >
-      <Tabs defaultValue="editor">
+    <div>
+      <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="w-full">
-          <TabsTrigger className="w-1/2" value="editor">Editor</TabsTrigger>
-          <TabsTrigger className="w-1/2" value="preview">Preview</TabsTrigger>
+          <TabsTrigger className="w-1/2" value="editor">
+            Editor
+          </TabsTrigger>
+          <TabsTrigger className="w-1/2" value="preview">
+            Preview
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="editor">
-          <RTE blog={blog} onContentSave={setContent}/>
+          <RTE
+            blog={blog}
+            post={post}
+            onContentSave={setPost}
+            onTabChange={setTab}
+          />
         </TabsContent>
-        <TabsContent value="preview"><BlogPreview content={content}/></TabsContent>
+        <TabsContent value="preview">
+          <BlogPreview post={post} onTabChange={setTab} />
+        </TabsContent>
       </Tabs>
     </div>
   );

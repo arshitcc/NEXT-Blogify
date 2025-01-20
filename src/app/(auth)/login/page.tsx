@@ -15,7 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GithubIcon, Mail } from 'lucide-react';
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/schemas/login.schema";
@@ -45,13 +44,16 @@ const page = () => {
     },
   });
 
-  if (error) {
-    toast({
-      title: "Error",
-      description: error,
-      variant: "destructive",
-    });
-  }
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
+
 
   const handleLoginSubmit = async (data: z.infer<typeof loginSchema>) => {
   

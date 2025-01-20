@@ -25,6 +25,7 @@ import { signupSchema } from "@/schemas/signup.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useUserStore } from "@/store/useUserStore";
+import { useEffect } from "react";
 
 export default function SignupPage() {
 
@@ -40,13 +41,16 @@ export default function SignupPage() {
     },
   });
 
-  if (error) {
-    toast({
-      title: "Error",
-      description: error,
-      variant: "destructive",
-    });
-  }
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
+
 
   const handleSignupSubmit = async (data: z.infer<typeof signupSchema>) => {
     const { email, password, confirmPassword } = data;

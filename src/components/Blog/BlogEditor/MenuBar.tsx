@@ -24,7 +24,6 @@ import { useCallback } from "react";
 
 export const MenuBar = ({ editor }: { editor: Editor }) => {
   const handleAddImage = useCallback(() => {
-    console.log("first");
     const url = window.prompt("URL");
 
     if (url) {
