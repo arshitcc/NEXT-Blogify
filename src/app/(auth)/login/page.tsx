@@ -58,13 +58,22 @@ const page = () => {
   const handleLoginSubmit = async (data: z.infer<typeof loginSchema>) => {
   
     try {
-      await login(loginMethod.CREDENTIALS, data);
-      toast({
-        title: "Success",
-        description: "Login successful",
-        variant: "default",
-      });
-      router.replace("/profile");
+      const res = await login(loginMethod.CREDENTIALS, data);
+      if(res){
+        toast({
+          title: "Success",
+          description: "Login successful",
+          variant: "default",
+        });
+        router.replace("/profile");
+      }
+      else {
+        toast({
+          title: "Error",
+          description: "Invalid credentials",
+          variant: "destructive",
+        })
+      }
     } catch (error) {
       toast({
         title: "Error",

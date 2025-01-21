@@ -18,8 +18,7 @@ export const POST = async (req: NextRequest, context: any) => {
       );
     }
 
-    const userId = session.user.id;
-
+    const userId = session.user._id;
     const { blogId } = await context.params;
     if (!isValidObjectId(blogId) || !isValidObjectId(userId)) {
       return NextResponse.json(
