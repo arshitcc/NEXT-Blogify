@@ -47,9 +47,6 @@ export const GET = async (req: NextRequest, context: any) => {
           size: {
             $size: "$comments",
           },
-          comments: {
-            $first: "$comments",
-          },
         },
       },
     ]);
