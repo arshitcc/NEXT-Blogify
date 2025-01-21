@@ -48,8 +48,8 @@ export const PATCH = async (req: NextRequest, context: any) => {
       );
     }
 
-    const { title, body, thumbnail }: IBlog = await req.json();
-    if ([title, body, thumbnail].some((field) => !field?.trim())) {
+    const { title, body }: IBlog = await req.json();
+    if ([title, body].some((field) => !field?.trim())) {
       return NextResponse.json(
         { success: false, message: "All fields are required", data: {} },
         { status: 400 }
@@ -59,7 +59,7 @@ export const PATCH = async (req: NextRequest, context: any) => {
     const blog = await Blog.findOneAndUpdate(
       { _id: blogId, postedBy: userId },
       {
-        $set : {title, body, thumbnail}
+        $set : {title, body}
       },
       { new: true }
     );

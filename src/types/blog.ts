@@ -10,6 +10,8 @@ export interface IBlog {
   views: number;
   postedBy: string;
   isActive: boolean;
+  comments: IComment[];
+  size: number;
 }
 
 export interface IComment {
@@ -20,11 +22,10 @@ export interface IComment {
 }
 
 export interface ICommentState {
-  comments: IComment[];
   isLoading: boolean;
   error: string;
-  addComment: (comment: Omit<IComment,'_id'>) => Promise<void>;
-  removeComment: (id: string) => Promise<void>;
+  addComment: (comment: Omit<IComment,'_id'>) => Promise<boolean>;
+  removeComment: (comment: IComment) => Promise<boolean>;
 }
 
 export interface IBlogState {
@@ -33,9 +34,9 @@ export interface IBlogState {
   error: string;
   blogs: IBlog[];
 
-  getBlog : (blogId: string, userId : string) => Promise<void>;
+  getBlog : (blogId: string, userId : string) => Promise<boolean>;
   createBlog : (blogData: Partial<z.infer<typeof blogSchema>>, userId : string) => Promise<boolean>;
-  updateBlog : (blog: IBlog, userId : string) => Promise<boolean>;
+  updateBlog : (blog: Partial<IBlog>, userId : string) => Promise<boolean>;
   deleteBlog : (blogId: string, userId: string) => Promise<boolean>;
 }
 

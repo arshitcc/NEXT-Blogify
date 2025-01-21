@@ -50,8 +50,8 @@ export const RTE = ({
       return;
     }
 
-    if (blog) {
-      const res = await updateBlog(blog, blog.postedBy);
+    if (post._id?.trim() && post.postedBy?.trim()) {
+      const res = await updateBlog({...post, title: post.title, body: editor.getHTML()}, post.postedBy);
       if (res) {
         toast({
           title: "Success",
@@ -59,12 +59,12 @@ export const RTE = ({
           variant: "default",
         });
       }
-      onContentSave({ ...blog, body: editor.getText() });
+      onContentSave({ ...blog, title: post.title, body: editor.getHTML() });
       return;
     }
 
     if (post) {
-      const res = await createBlog(post, session?.user._id);
+      const res = await createBlog({...post, title: post.title, body: editor.getHTML()}, session?.user._id);
       if (res) {
         toast({
           title: "Success",
@@ -72,7 +72,7 @@ export const RTE = ({
           variant: "default",
         });
       }
-      onContentSave({ ...post, body: editor.getText() });
+      onContentSave({ ...post, title: post.title, body: editor.getHTML() });
       return;
     }
   };
@@ -81,7 +81,7 @@ export const RTE = ({
     <div className="relative">
       <MenuBar editor={editor} />
       <Input
-        value={blog?.title || post.title}
+        value={blog?.title || post?.title || ""}
         onChange={(e) =>
           blog
             ? onContentSave({ ...blog, title: e.target.value })

@@ -68,9 +68,9 @@ const page = () => {
                   className="w-full h-48 object-cover rounded-t-lg"
                 />
                 <CardContent className="flex-grow">
-                  <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">{blog.body.toString()}</p>
-                  <Link href={`/b/${blog._id}`} className="text-blue-500 hover:underline">
+                  <h3 className="text-xl font-semibold min-h-12 mb-2">{blog.title}</h3>
+                  <p className="text-gray-600 mb-4 truncate line-clamp-3">{blog.body.toString()}</p>
+                  <Link href={`/b/${blog._id}`} className="mt-4 text-blue-500 hover:underline">
                     Read More
                   </Link>
                 </CardContent>

@@ -19,11 +19,14 @@ const blogStore: StateCreator<IBlogState> = (set) => ({
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_END}/api/b/${blogId}`);
       if (res.data.success) {
         set({ blog: res.data.data });
+        return true;
       } else {
         set({ error: res.data.message });
+        return false;
       }
     } catch (error: any) {
       set({ error: error.message });
+      return false;
     } finally {
       set({ isLoading: false });
     }

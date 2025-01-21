@@ -5,13 +5,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RTE } from "./BlogEditor/RTE";
 import { BlogPreview } from "./BlogPreview/BlogPreview";
 import { IBlog } from "@/types/blog";
+import "@/components/Blog/BlogEditor/index.css";
 
 const Editor = ({ blog }: { blog?: IBlog }) => {
   const [post, setPost] = useState<Partial<IBlog>>({
+    _id: blog?._id || "",
     title: blog?.title || "",
     body: blog?.body || "",
     thumbnail: blog?.thumbnail || "",
     isActive: blog?.isActive || false,
+    postedBy: blog?.postedBy || ""
   });
 
   const [tab, setTab] = useState<string>("editor");
@@ -29,7 +32,6 @@ const Editor = ({ blog }: { blog?: IBlog }) => {
         </TabsList>
         <TabsContent value="editor">
           <RTE
-            blog={blog}
             post={post}
             onContentSave={setPost}
             onTabChange={setTab}

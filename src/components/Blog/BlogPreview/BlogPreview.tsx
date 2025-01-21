@@ -6,18 +6,17 @@ import { useBlogStore } from "@/store/useBlogStore";
 import { IBlog } from "@/types/blog";
 import { useSession } from "next-auth/react";
 import parse from "html-react-parser";
-import { Edit3Icon, SaveIcon, Share } from "lucide-react";
+import { ArrowUpLeftFromSquareIcon, Edit3Icon, SaveIcon, Share } from "lucide-react";
+import "@/components/Blog/BlogEditor/index.css";
 
 export const BlogPreview = ({
   post,
-  blog,
   onTabChange,
 }: {
   post: Partial<IBlog>;
-  blog?: IBlog;
   onTabChange: (tab: string) => void;
 }) => {
-  const { isLoading, error, createBlog, updateBlog } = useBlogStore();
+  const { createBlog, updateBlog } = useBlogStore();
   const { toast } = useToast();
   const { data: session } = useSession();
   if (!post.body?.trim()) {
@@ -25,33 +24,38 @@ export const BlogPreview = ({
   }
 
   const handleSaveAsDraft = async () => {
-    if (!blog) {
-      const res = await createBlog({ ...post }, session?.user._id);
+    if (post._id?.trim() && post.postedBy?.trim()) {
+      const res = await updateBlog({...post}, post.postedBy);
       if (res) {
         toast({
           title: "Success",
           description: "Blog saved as draft successfully",
           variant: "default",
         });
-      } else {
+      }
+      else {
         toast({
           title: "Error",
-          description: "Failed to save blog as draft",
+          description: "Something went wrong",
           variant: "destructive",
         });
       }
-    } else {
-      const res = await updateBlog(blog, session?.user._id);
+      return;
+    }
+
+    if (post) {
+      const res = await createBlog({...post}, session?.user._id);
       if (res) {
         toast({
           title: "Success",
           description: "Blog saved as draft successfully",
           variant: "default",
         });
-      } else {
+      }
+      else {
         toast({
           title: "Error",
-          description: "Failed to save blog as draft",
+          description: "Something went wrong",
           variant: "destructive",
         });
       }
@@ -60,8 +64,8 @@ export const BlogPreview = ({
 
   const handlePublishBlog = async () => {
     try {
-      if (blog) {
-        const res = await updateBlog(blog, session?.user._id);
+      if (post._id?.trim() && post.postedBy?.trim()) {
+        const res = await updateBlog(post, session?.user._id);
         if (res) {
           toast({
             title: "Success",
@@ -104,16 +108,18 @@ export const BlogPreview = ({
 
   return (
     <div>
-      <h1 className="text-4xl font-semibold">{blog?.title || post.title}</h1>
-      <div className="tiptap min-h-[60vh]">
-        {parse(blog?.body || post.body)}
+      <div className="tiptap min-h-[70vh] overflow-y-scroll border-2 rounded-lg p-2">
+      <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 text-center mb-6">
+            {post.title}
+          </h1>
+        {parse(post.body)}
       </div>
       <div className="flex gap-4">
         <Button onClick={handleSaveAsDraft} className="mt-4 ">
           Save as Draft <SaveIcon />
         </Button>
         <Button onClick={() => onTabChange("editor")} className="mt-4 ">
-          Edit This <Edit3Icon />
+          <ArrowUpLeftFromSquareIcon/> Edit This
         </Button>
         <Button onClick={handlePublishBlog} className="mt-4 ">
           Publish the Thought <Share />
