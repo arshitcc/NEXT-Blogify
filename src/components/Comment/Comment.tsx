@@ -100,7 +100,7 @@ const Comments = ({ blog }: { blog: IBlog }) => {
       {session && (
         <div>
           <h3 className="text-lg font-semibold">
-            What's your thought on this ?
+            What&apos;s your thought on this ?
           </h3>
           <Card>
             <CardContent>

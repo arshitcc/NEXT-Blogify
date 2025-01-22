@@ -1,5 +1,4 @@
 import mongoose, { Document } from "mongoose";
-import { IBlog } from "./blogs.models";
 
 export enum UserRoles {
   ADMIN = "admin",

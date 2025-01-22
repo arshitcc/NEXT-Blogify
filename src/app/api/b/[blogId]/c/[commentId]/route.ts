@@ -1,4 +1,4 @@
-import { Comment, IComment } from "@/models/comments.models";
+import { Comment } from "@/models/comments.models";
 import { connectDB } from "@/lib/db";
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";

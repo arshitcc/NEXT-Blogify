@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface EmailTemplateProps {
   verify?: {
@@ -29,22 +29,30 @@ export function EmailTemplate({ verify, password, blog }: EmailTemplateProps) {
           {/* Verify Section */}
           {verify && (
             <div>
-              <h2 className="text-xl font-semibold text-gray-800">Verify Your Email</h2>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Verify Your Email
+              </h2>
               <p className="text-gray-600">
-                Hello! Thanks for signing up with Blogify. To get started, please verify your email address.
+                Hello! Thanks for signing up with Blogify. To get started,
+                please verify your email address.
               </p>
               <div className="bg-gray-50 border border-gray-200 rounded-md p-3 text-center font-mono text-gray-800">
-                <strong>Your verification code: {verify.verificationCode}</strong>
+                <strong>
+                  Your verification code: {verify.verificationCode}
+                </strong>
               </div>
               <p className="text-gray-600">
-                Enter this code on the verification page to activate your account.
+                Enter this code on the verification Page to activate your
+                account.
               </p>
             </div>
           )}
           {/* Password Reset Section */}
           {password && (
             <div>
-              <h2 className="text-xl font-semibold text-gray-800">Password Reset Request</h2>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Password Reset Request
+              </h2>
               <p className="text-gray-600">{password.message}</p>
               <a
                 href={password.resetURL}
@@ -53,15 +61,20 @@ export function EmailTemplate({ verify, password, blog }: EmailTemplateProps) {
                 Reset Password
               </a>
               <p className="text-sm text-gray-500 mt-2">
-                If you didn’t request a password reset, please ignore this email.
+                If you didn’t request a password reset, please ignore this
+                email.
               </p>
             </div>
           )}
           {/* Blog Live Section */}
           {blog && (
             <div>
-              <h2 className="text-xl font-semibold text-gray-800">Your Blog Post is Live!</h2>
-              <p className="text-gray-600">Great news! Your blog post has been successfully published.</p>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Your Blog Post is Live!
+              </h2>
+              <p className="text-gray-600">
+                Great news! Your blog post has been successfully published.
+              </p>
               <p className="text-gray-800">
                 <strong>Title:</strong> {blog.title}
               </p>

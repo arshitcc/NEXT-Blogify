@@ -6,8 +6,9 @@ import { useBlogStore } from "@/store/useBlogStore";
 import { IBlog } from "@/types/blog";
 import { useSession } from "next-auth/react";
 import parse from "html-react-parser";
-import { ArrowUpLeftFromSquareIcon, SaveIcon, Share } from "lucide-react";
+import { ArrowUpLeftFromSquareIcon, Share } from "lucide-react";
 import "@/components/Blog/BlogEditor/index.css";
+import Image from "next/image";
 
 export const BlogPreview = ({
   post,
@@ -16,95 +17,12 @@ export const BlogPreview = ({
   post: Partial<IBlog>;
   onTabChange: (tab: string) => void;
 }) => {
-  const { createBlog, updateBlog } = useBlogStore();
+  const { updateBlog } = useBlogStore();
   const { toast } = useToast();
   const { data: session } = useSession();
   if (!post.body?.trim()) {
     return <WriteSomething />;
   }
-
-  // const handleSaveAsDraft = async () => {
-  //   if (post._id?.trim() && post.postedBy?.trim()) {
-  //     const res = await updateBlog({...post}, post.postedBy);
-  //     if (res) {
-  //       toast({
-  //         title: "Success",
-  //         description: "Blog saved as draft successfully",
-  //         variant: "default",
-  //       });
-  //     }
-  //     else {
-  //       toast({
-  //         title: "Error",
-  //         description: "Something went wrong",
-  //         variant: "destructive",
-  //       });
-  //     }
-  //     return;
-  //   }
-
-  //   if (post) {
-  //     const res = await createBlog({...post}, session?.user._id);
-  //     if (res) {
-  //       toast({
-  //         title: "Success",
-  //         description: "Blog saved as draft successfully",
-  //         variant: "default",
-  //       });
-  //     }
-  //     else {
-  //       toast({
-  //         title: "Error",
-  //         description: "Something went wrong",
-  //         variant: "destructive",
-  //       });
-  //     }
-  //   }
-  // };
-
-  // const handlePublishBlog = async () => {
-  //   try {
-  //     if (post._id?.trim() && post.postedBy?.trim()) {
-  //       const res = await updateBlog(post, session?.user._id);
-  //       if (res) {
-  //         toast({
-  //           title: "Success",
-  //           description: "Your blog has been published successfully",
-  //           variant: "default",
-  //         });
-  //       } else {
-  //         toast({
-  //           title: "Error",
-  //           description: "Failed to Publish Post",
-  //           variant: "destructive",
-  //         });
-  //       }
-  //     }
-
-  //     if (post) {
-  //       const res = await createBlog(post, session?.user._id);
-  //       if (res) {
-  //         toast({
-  //           title: "Success",
-  //           description: "Your blog has been published successfully",
-  //           variant: "default",
-  //         });
-  //       } else {
-  //         toast({
-  //           title: "Error",
-  //           description: "Failed to Publish Post",
-  //           variant: "destructive",
-  //         });
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     toast({
-  //       title: "Error",
-  //       description: error.message,
-  //       variant: "destructive",
-  //     });
-  //   }
-  // };
 
   const handlePublishBlog = async () => {
     try {
@@ -133,9 +51,9 @@ export const BlogPreview = ({
 
   return (
     <div>
-      <div className="tiptap min-h-[70vh] overflow-y-scroll border-2 rounded-lg p-2">
+      <div className="tiptap min-h-[80vh] overflow-y-scroll border-2 rounded-lg p-2">
         <div>
-          <img src={post.thumbnail?.url} alt={post.title} />
+          <Image src={post.thumbnail?.url || ""} alt={post.title || ""} width={1000} height={1000}/>
         </div>
       <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 text-center mb-6">
             {post.title}

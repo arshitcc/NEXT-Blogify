@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { Edit3Icon, Trash2Icon } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 const Page = () => {
   const { blogId }: { blogId: string } = useParams();
@@ -60,7 +61,7 @@ const Page = () => {
       ) : (
         <div className="w-full max-w-4xl">
           <div className="text-center flex items-center justify-center">
-            <img src={blog?.thumbnail.url} alt={blog.title} />
+            <Image src={blog?.thumbnail.url} alt={blog.title} width={1000} height={1000}/>
           </div>
           <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 text-center my-6">
             {blog?.title}
@@ -96,7 +97,7 @@ const Page = () => {
             </Card>
           </div>
           {blog && (blog?.postedBy === session?.user._id) && (
-            <div className="flex gap-2 fixed top-24 right-40">
+            <div className="flex gap-2 fixed top-24 right-20">
               <Button
                 variant="default"
                 onClick={() => router.replace(`/blog/edit/${blog._id}`)}

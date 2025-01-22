@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { useBlogStore } from "@/store/useBlogStore";
 import { useToast } from "@/hooks/use-toast";
 
-const page = () => {
+const Page = () => {
   const { blogId }: { blogId: string } = useParams();
   const { data: session } = useSession();
   const { isLoading, blog, getBlog } = useBlogStore();
@@ -23,7 +23,7 @@ const page = () => {
           description: "Invalid || Blog cannot be accessed",
           variant: "destructive",
         });
-        router.replace(`/profile`)
+        router.replace(`/profile`);
       }
     };
     if (blogId && session?.user._id) {
@@ -31,11 +31,16 @@ const page = () => {
     }
   }, [blogId, session]);
 
-  if(blog && session && (blog.postedBy!==session.user._id)){
-    router.replace(`/b/${blog._id}`)
+  if (blog && session && blog.postedBy !== session.user._id) {
+    router.replace(`/b/${blog._id}`);
   }
 
-  if (blog && session && (blog._id===blogId) && (blog.postedBy === session.user._id)) {
+  if (
+    blog &&
+    session &&
+    blog._id === blogId &&
+    blog.postedBy === session.user._id
+  ) {
     return (
       <div className="container min-h-screen mx-auto p-4">
         <Editor blog={blog} />
@@ -51,4 +56,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

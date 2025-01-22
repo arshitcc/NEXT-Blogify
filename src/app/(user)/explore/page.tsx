@@ -1,7 +1,10 @@
 "use client";
 
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
-import { blogs } from "../../../assets/explore-blogs.json";
+import data from "@/assets/explore-blogs.json";
+import Image from "next/image";
+
+const blogs = data.blogs;
 
 export default function Explore() {
   return (
@@ -30,7 +33,7 @@ export default function Explore() {
                 By {blog.author} • {blog.category}
               </CardItem>
               <CardItem translateZ="100" className="w-full mt-4">
-                <img
+                <Image
                   src={blog.image || "/placeholder.svg"}
                   height="1000"
                   width="1000"

@@ -1,5 +1,5 @@
 import { create, StateCreator } from "zustand";
-import { IComment, ICommentState } from "@/types/blog";
+import { ICommentState } from "@/types/blog";
 import axios from "axios";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 

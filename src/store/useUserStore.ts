@@ -7,18 +7,22 @@ import { signupSchema } from "@/schemas/signup.schema";
 import { loginSchema } from "@/schemas/login.schema";
 import { signIn, signOut } from "next-auth/react";
 import { loginMethod } from "@/types/user";
+import { IBlog } from "@/types/blog";
+import { IUser } from "@/types/user";
 
 axios.defaults.withCredentials = true;
 
 const userStore: StateCreator<IUserState> = (set) => ({
   user: null,
-  profile: null,
+  profile: {} as IUser & {
+    blogs: IBlog[];
+  },
   isLoading: false,
   error: "",
   signup: async (data: Omit<z.infer<typeof signupSchema>,'confirmPassword'>) => {
     set({ isLoading: true });
     try {
-        const res = await axios.post("/api/signup", data);
+        await axios.post("/api/signup", data);
         return true;
     } catch (error : any) {
         set({ error: error.response.data.message });

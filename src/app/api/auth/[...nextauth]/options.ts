@@ -32,12 +32,17 @@ export const AuthOptions: NextAuthOptions = {
           placeholder: "Password",
         },
       },
-      async authorize(credentials: Record<"user" | "password", string> | undefined) : Promise<NextUser | null>{
+      async authorize(
+        credentials: Record<"user" | "password", string> | undefined
+      ): Promise<NextUser | null> {
         await connectDB();
 
         try {
           const user = await User.findOne({
-            $or: [{ email: credentials?.user }, { username: credentials?.user }],
+            $or: [
+              { email: credentials?.user },
+              { username: credentials?.user },
+            ],
           });
           if (!user) {
             throw new Error("User not found");
@@ -56,30 +61,30 @@ export const AuthOptions: NextAuthOptions = {
           } else {
             throw new Error("Wrong Password");
           }
-        } catch (error : unknown) {
-            throw new Error((error as { message: string })?.message || "");
+        } catch (error: unknown) {
+          throw new Error((error as { message: string })?.message || "");
         }
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
-        if(user){
-            token._id = user._id; 
-            token.username = user.username;
-            token.isVerified = user.isVerified;
-            token.role = user.role;
-        }
-        return token;
+      if (user) {
+        token._id = user._id;
+        token.username = user.username;
+        token.isVerified = user.isVerified;
+        token.role = user.role;
+      }
+      return token;
     },
     async session({ session, token }) {
-        if(token){
-            session.user._id = token._id;
-            session.user.username = token.username;
-            session.user.isVerified = token.isVerified;
-            session.user.role = token.role;
-        }
-        return session;
+      if (token) {
+        session.user._id = token._id;
+        session.user.username = token.username;
+        session.user.isVerified = token.isVerified;
+        session.user.role = token.role;
+      }
+      return session;
     },
     async signIn({ account, profile, user }) {
       await connectDB();
@@ -89,25 +94,32 @@ export const AuthOptions: NextAuthOptions = {
           user.isVerified = true;
           await user.save();
           return true;
-        } 
-        else {
+        } else {
           await User.create({
-            username: profile?.name || (profile as { login: string })?.login ||profile?.email?.split("@")[0],
+            username:
+              profile?.name ||
+              (profile as { login: string })?.login ||
+              profile?.email?.split("@")[0],
             email: profile?.email,
-            password : account.provider,
+            password: account.provider,
             isVerified: true,
-            avatar : (profile as { picture: string })?.picture || (profile as { avatar_url: string })?.avatar_url || "",
-            verificationCode : Math.floor(100000 + Math.random() * 900000).toString(),
-            verificationCodeExpiry : new Date(Date.now() + 15 * 60 * 1000)
+            avatar:
+              (profile as { picture: string })?.picture ||
+              (profile as { avatar_url: string })?.avatar_url ||
+              "",
+            verificationCode: Math.floor(
+              100000 + Math.random() * 900000
+            ).toString(),
+            verificationCodeExpiry: new Date(Date.now() + 15 * 60 * 1000),
           });
           return true;
         }
       }
-      if(account?.provider === "credentials" && user){
+      if (account?.provider === "credentials" && user) {
         return true;
       }
       return false;
-    }
+    },
   },
   pages: {
     signIn: "/login",

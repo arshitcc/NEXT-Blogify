@@ -8,10 +8,12 @@ import { SparklesCore } from "@/components/ui/sparkles";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { useRouter } from "next/navigation";
-import {blogs} from "../assets/blogs.json";
+import data from "@/assets/blogs.json";
+import Image from "next/image";
+
+const blogs = data.blogs;
 
 export default function Page() {
-
   const router = useRouter();
   return (
     <div className="min-h-screen bg-gray-100">
@@ -74,10 +76,13 @@ export default function Page() {
                   {blog.description}
                 </CardItem>
                 <CardItem translateZ="100" className="mt-4">
-                  <img
+                  <Image
                     src={blog.image}
                     className="h-60 w-full object-cover rounded-xl shadow-sm"
                     alt="Thumbnail"
+                    width={1000}
+                    height={1000}
+
                   />
                 </CardItem>
                 <div className="flex justify-between items-center mt-6">

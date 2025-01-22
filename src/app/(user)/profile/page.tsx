@@ -12,18 +12,18 @@ import { IBlog } from "@/types/blog";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 
-const page = () => {
+const Page = () => {
   const { isLoading, error, profile, getProfile } = useUserStore();
-  const { data : session } = useSession();
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchProfile = async () => {
       await getProfile(session?.user?._id);
     };
-    if(session?.user?._id){
+    if (session?.user?._id) {
       fetchProfile();
     }
-  },[session]);
+  }, [session]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -43,8 +43,12 @@ const page = () => {
                   <AvatarFallback>{profile?.username}</AvatarFallback>
                 </Avatar>
                 <h2 className="text-2xl font-bold mb-2">{profile?.username}</h2>
-                {profile?.email && <p className="text-gray-600 mb-2">{profile?.email}</p>}
-                {profile?.phone && <p className="text-gray-600 mb-2">{profile?.phone}</p>}
+                {profile?.email && (
+                  <p className="text-gray-600 mb-2">{profile?.email}</p>
+                )}
+                {profile?.phone && (
+                  <p className="text-gray-600 mb-2">{profile?.phone}</p>
+                )}
                 <Badge variant={profile?.isVerified ? "default" : "secondary"}>
                   {profile?.isVerified ? "Verified" : "Unverified"}
                 </Badge>
@@ -58,7 +62,7 @@ const page = () => {
           <BlogsSkeleton />
         ) : profile?.blogs && profile?.blogs.length > 0 ? (
           <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {profile?.blogs.map((blog : IBlog) => (
+            {profile?.blogs.map((blog: IBlog) => (
               <Card key={blog._id.toString()} className="flex flex-col">
                 <Image
                   src={blog.thumbnail.url}
@@ -68,9 +72,16 @@ const page = () => {
                   className="w-full h-48 object-cover rounded-t-lg"
                 />
                 <CardContent className="flex-grow">
-                  <h3 className="text-xl font-semibold min-h-12 mb-2">{blog.title}</h3>
-                  <p className="text-gray-600 mb-4 truncate line-clamp-3">{blog.body.toString()}</p>
-                  <Link href={`/b/${blog._id}`} className="mt-4 text-blue-500 hover:underline">
+                  <h3 className="text-xl font-semibold min-h-12 mb-2">
+                    {blog.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4 truncate line-clamp-3">
+                    {blog.body.toString()}
+                  </p>
+                  <Link
+                    href={`/b/${blog._id}`}
+                    className="mt-4 text-blue-500 hover:underline"
+                  >
                     Read More
                   </Link>
                 </CardContent>
@@ -115,7 +126,7 @@ const NoPosts = () => (
   <Card className="md:col-span-2 text-center py-12">
     <CardContent>
       <p className="text-xl text-gray-600 mb-4">
-        What's on your mind? Share with others!
+        What&apos;s on your mind? Share with others!
       </p>
       <Link href={"/blog/new"}>
         <Button>
@@ -126,4 +137,4 @@ const NoPosts = () => (
   </Card>
 );
 
-export default page;
+export default Page;
