@@ -1,9 +1,10 @@
-import { blogSchema } from "@/schemas/blog.schema";
-import { z } from "zod";
-
+interface Thumbnail {
+  public_id: string;
+  url: string;
+}
 export interface IBlog {
   _id: string;
-  thumbnail: string;
+  thumbnail: Thumbnail;
   title: string;
   slug: string;
   body: string;
@@ -34,9 +35,10 @@ export interface IBlogState {
   error: string;
   blogs: IBlog[];
 
-  getBlog : (blogId: string, userId : string) => Promise<boolean>;
-  createBlog : (blogData: Partial<z.infer<typeof blogSchema>>, userId : string) => Promise<boolean>;
-  updateBlog : (blog: Partial<IBlog>, userId : string) => Promise<boolean>;
-  deleteBlog : (blogId: string, userId: string) => Promise<boolean>;
+  getBlog: (blogId: string, userId : string) => Promise<boolean>;
+  createBlog: (blogData: Partial<IBlog>, userId : string, thumbnail?: File | null) => Promise<boolean>;
+  updateBlog: (blog: Partial<IBlog>, userId : string) => Promise<boolean>;
+  deleteBlog: (blogId: string, userId: string) => Promise<boolean>;
+  updateThumbnail: (blog: Partial<IBlog>, thumbnail: File, userId: string) => Promise<boolean>;
 }
 

@@ -26,7 +26,6 @@ export const POST = async (req: NextRequest, context: any) => {
     const buffer = Buffer.from(bytes);
 
     const thumbnail = await uploadFile(buffer);
-    console.log(thumbnail);
 
     if ([title, body].some((field) => !field?.trim())) {
       return NextResponse.json(

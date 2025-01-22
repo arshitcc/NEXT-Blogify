@@ -1,7 +1,6 @@
 import { create, StateCreator } from "zustand";
 import { persist, createJSONStorage, devtools } from "zustand/middleware";
 import axios from "axios";
-import { blogSchema } from "@/schemas/blog.schema";
 import { IBlogState } from "@/types/blog";
 import { IBlog } from "@/types/blog";
 
@@ -31,14 +30,21 @@ const blogStore: StateCreator<IBlogState> = (set) => ({
       set({ isLoading: false });
     }
   },
-  createBlog: async (blogData, userId) => {
+  createBlog: async (blogData, userId, thumbnail) => {
     set({ isLoading: true });
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_END}/api/u/${userId}/new-post`, blogData);
+      const blog = new FormData();
+      if(blogData.title) blog.append('title', blogData.title);
+      if(blogData.body) blog.append('body', blogData.body);
+      if(thumbnail) blog.append('thumbnail', thumbnail);
+      if(blogData.isActive) blog.append('isActive', String(blogData.isActive));
+
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_END}/api/u/${userId}/new-post`, blog);
       if (!res.data.success) {
         set({ error: res.data.message });
         return false;
       }
+      set({ blog: res.data.data });
       return true;
     } catch (error: any) {
       set({ error: error.message });
@@ -76,6 +82,21 @@ const blogStore: StateCreator<IBlogState> = (set) => ({
       return false;
     }
   },
+  updateThumbnail: async (blog,thumbnail,userId) => {
+    set({isLoading : true});
+    try {
+      const blogData = new FormData();
+      blogData.append('thumbnail', thumbnail);
+      const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_END}/api/u/${userId}/b/${blog._id}/update-thumbnail`, blogData);
+      if(res.data.success){
+        return true;
+      }
+      return false;
+    } catch (error: any) {
+      set({error : error.message});
+      return false;
+    }
+  }
 });
 
 export const useBlogStore = create<IBlogState>()(

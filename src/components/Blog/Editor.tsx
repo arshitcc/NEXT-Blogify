@@ -12,10 +12,15 @@ const Editor = ({ blog }: { blog?: IBlog }) => {
     _id: blog?._id || "",
     title: blog?.title || "",
     body: blog?.body || "",
-    thumbnail: blog?.thumbnail || "",
+    thumbnail: {
+      public_id: blog?.thumbnail.public_id || "",
+      url: blog?.thumbnail.url || "",
+    },
     isActive: blog?.isActive || false,
     postedBy: blog?.postedBy || ""
   });
+
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
 
   const [tab, setTab] = useState<string>("editor");
 
@@ -33,6 +38,8 @@ const Editor = ({ blog }: { blog?: IBlog }) => {
         <TabsContent value="editor">
           <RTE
             post={post}
+            thumbnail={thumbnail}
+            onThumbnailSave={setThumbnail}
             onContentSave={setPost}
             onTabChange={setTab}
           />

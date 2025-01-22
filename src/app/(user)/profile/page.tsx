@@ -61,7 +61,7 @@ const page = () => {
             {profile?.blogs.map((blog : IBlog) => (
               <Card key={blog._id.toString()} className="flex flex-col">
                 <Image
-                  src={blog.thumbnail || "/placeholder.svg"}
+                  src={blog.thumbnail.url}
                   alt={blog.title}
                   width={300}
                   height={200}

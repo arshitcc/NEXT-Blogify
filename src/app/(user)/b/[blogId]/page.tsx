@@ -9,13 +9,16 @@ import Comments from "@/components/Comment/Comment";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Edit3Icon } from "lucide-react";
+import { Edit3Icon, Trash2Icon } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 const Page = () => {
   const { blogId }: { blogId: string } = useParams();
-  const { isLoading, blog, getBlog } = useBlogStore();
+  const { isLoading, blog, getBlog, deleteBlog } = useBlogStore();
   const { data: session } = useSession();
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -27,7 +30,26 @@ const Page = () => {
     }
   }, [session]);
 
-  console.log(blog && blog?.postedBy === session?.user._id)
+
+  const handleDeleteBlog = async () => {
+    const res = await deleteBlog(blogId, session?.user._id);
+    if (res) {
+      router.replace(`/profile`);
+      toast({
+        title: "Success",
+        description: "Blog deleted successfully",
+        variant: "default",
+      })
+    }
+    else {
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+        variant: "destructive",
+      })
+    }
+  }
+
 
   return (
     <div className="flex flex-col items-center justify-center px-4 py-8 md:px-8 lg:px-16">
@@ -37,7 +59,10 @@ const Page = () => {
         </div>
       ) : (
         <div className="w-full max-w-4xl">
-          <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 text-center mb-6">
+          <div className="text-center flex items-center justify-center">
+            <img src={blog?.thumbnail.url} alt={blog.title} />
+          </div>
+          <h1 className="text-3xl md:text-4xl font-semibold text-gray-800 text-center my-6">
             {blog?.title}
           </h1>
           <div className="prose prose-lg prose-blue mx-auto">
@@ -71,13 +96,29 @@ const Page = () => {
             </Card>
           </div>
           {blog && (blog?.postedBy === session?.user._id) && (
-            <div className="fixed top-24 right-40">
+            <div className="flex gap-2 fixed top-24 right-40">
               <Button
                 variant="default"
                 onClick={() => router.replace(`/blog/edit/${blog._id}`)}
               >
                 Edit <Edit3Icon/>
               </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="destructive">Delete <Trash2Icon/></Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Delete Blog</DialogTitle>
+                    <DialogDescription>
+                      Do you want to delete this memory ?
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="destructive" onClick={handleDeleteBlog}>Delete <Trash2Icon/></Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           )}
         </div>
