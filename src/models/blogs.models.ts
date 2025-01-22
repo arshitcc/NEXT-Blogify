@@ -2,7 +2,10 @@ import mongoose, { Document } from "mongoose";
 
 export interface IBlog extends Document {
   _id: mongoose.Types.ObjectId;
-  thumbnail: string;
+  thumbnail: {
+    public_id : string,
+    url : string,
+  },
   title: string;
   slug: string;
   body: string;
@@ -14,8 +17,14 @@ export interface IBlog extends Document {
 const blogSchema = new mongoose.Schema<IBlog>(
   {
     thumbnail: {
-      type: String,
-      default: "",
+      public_id : {
+        type: String,
+        default: "https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=600"
+      },
+      url : {
+        type: String,
+        default: "https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=600"
+      }
     },
     title: {
       type: String,
