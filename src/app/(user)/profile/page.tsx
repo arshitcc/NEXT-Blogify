@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { IBlog } from "@/types/blog";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
+import parse from "html-react-parser";
 
 const Page = () => {
   const { isLoading, error, profile, getProfile } = useUserStore();
@@ -75,9 +76,9 @@ const Page = () => {
                   <h3 className="text-xl font-semibold min-h-12 mb-2">
                     {blog.title}
                   </h3>
-                  <p className="text-gray-600 mb-4 truncate line-clamp-3">
-                    {blog.body.toString()}
-                  </p>
+                  <div className="text-gray-600 mb-4 truncate line-clamp-3">
+                    {parse(blog.body.toString())}
+                  </div>
                   <Link
                     href={`/b/${blog._id}`}
                     className="mt-4 text-blue-500 hover:underline"
