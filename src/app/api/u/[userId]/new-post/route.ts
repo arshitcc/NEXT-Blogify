@@ -20,12 +20,13 @@ export const POST = async (req: NextRequest, context: any) => {
     const blogData = await req.formData();
     const title = blogData.get("title") as string;
     const body = blogData.get("body") as string;
-
+    let thumbnail
     const thumbnailData = blogData.get("thumbnail") as File;
-    const bytes = await thumbnailData.arrayBuffer()
-    const buffer = Buffer.from(bytes);
-
-    const thumbnail = await uploadFile(buffer);
+    if(thumbnailData){
+      const bytes = await thumbnailData.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      thumbnail = await uploadFile(buffer);
+    }
 
     if ([title, body].some((field) => !field?.trim())) {
       return NextResponse.json(
@@ -35,13 +36,13 @@ export const POST = async (req: NextRequest, context: any) => {
     }
     const slug = title.trim().split(" ").join("-").toLowerCase();
     const blog = await Blog.create({
-      thumbnail,
       title,
       slug,
       body,
       postedBy: userId,
+      ...(thumbnail && { thumbnail })
     });
-
+    
     if (!blog) {
       return NextResponse.json(
         { success: false, message: "Failed to create post", data: {} },
