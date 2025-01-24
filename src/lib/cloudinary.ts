@@ -39,6 +39,7 @@ const deleteFile = async (fileId: string) => {
   try {
     const res = await cloudinary.uploader.destroy(fileId, {resource_type : "image"});
     if(res) return true;
+    console.log(`Files are not getting deleted from cloudinary with public_id : ${fileId}`);
     return false;
   } catch (error) {
     throw new Error("Failed to delete file from cloudinary");

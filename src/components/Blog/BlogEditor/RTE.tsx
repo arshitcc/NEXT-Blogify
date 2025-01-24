@@ -24,7 +24,7 @@ export const RTE = ({
   post: Partial<IBlog>;
   thumbnail: File | null;
   onContentSave: (post: Partial<IBlog>) => void;
-  onThumbnailSave: (thumbnail: File) => void;
+  onThumbnailSave: (thumbnail: File|null) => void;
   onTabChange: (tab: string) => void;
 }) => {
   const {
@@ -59,12 +59,13 @@ export const RTE = ({
     if (post._id?.trim() && post.postedBy?.trim()) {
       const res = await updateBlog(
         { ...post, title: post.title, body: editor.getHTML() },
-        post.postedBy
+        post.postedBy,
+        thumbnail
       );
       if (res) {
         toast({
           title: "Success",
-          description: "Blog saved as draft successfully",
+          description: "Blog Updated successfully",
           variant: "default",
         });
       }
@@ -72,9 +73,11 @@ export const RTE = ({
         ...post,
         title: post.title,
         body: editor.getHTML(),
+        thumbnail: created_blog?.thumbnail,
         _id: created_blog?._id || "",
         postedBy: created_blog?.postedBy || "",
       });
+      onThumbnailSave(null)
       return;
     }
 
@@ -87,7 +90,7 @@ export const RTE = ({
       if (res) {
         toast({
           title: "Success",
-          description: "Blog saved as draft successfully",
+          description: "New Blog created and saved as draft  successfully",
           variant: "default",
         });
       }
@@ -99,6 +102,7 @@ export const RTE = ({
         _id: created_blog?._id,
         postedBy: created_blog?.postedBy,
       });
+      onThumbnailSave(null);
       return;
     }
   };
@@ -113,18 +117,17 @@ export const RTE = ({
           className="flex-1 w-[90%] text-xl md:text-2xl border-2 rounded-lg h-12 my-4"
           placeholder="Title"
         />
-        <div className="relative flex items-center w-[10%] h-full justify-center">
+        <div className="relative group flex items-center w-[10%] h-full justify-center">
           <ImageDown className="h-6 w-6" />
           <Input
             type="file"
             className="absolute inset-0 opacity-0 cursor-pointer"
-            onChange={(e) => {
-              const file = e.target?.files?.[0];
-              if (file) {
-                onThumbnailSave(file);
-              }
-            }}
+            onChange={(e) => onThumbnailSave(e.target.files?.[0] || null)}
           />
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {post?.thumbnail?.url.trim() ? "Change Thumbnail" : "Add Thumbnail"}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-t-gray-800 border-transparent"></div>
+          </div>
         </div>
       </div>
       <EditorContent
@@ -132,7 +135,7 @@ export const RTE = ({
         editor={editor}
       />
       <div className="flex gap-4">
-        <Button onClick={handleSaveAsDraft} className="mt-4 ">
+        <Button onClick={handleSaveAsDraft} disabled={isLoading} className="mt-4 ">
           Save as Draft <SaveIcon />
         </Button>
         <Button onClick={() => onTabChange("preview")} className="mt-4 ">

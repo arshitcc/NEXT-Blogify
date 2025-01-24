@@ -1,3 +1,4 @@
+import { deleteFile, uploadFile } from "@/lib/cloudinary";
 import { connectDB } from "@/lib/db";
 import { Blog, IBlog } from "@/models/blogs.models";
 import { isValidObjectId } from "mongoose";
@@ -48,7 +49,24 @@ export const PATCH = async (req: NextRequest, context: any) => {
       );
     }
 
-    const { title, body }: IBlog = await req.json();
+    const blogData = await req.formData();
+    const title = blogData.get("title") as string;
+    const body = blogData.get("body") as string;
+    const thumbnailData = blogData.get("thumbnail") as string;
+    let prevThumbnail;
+    if(thumbnailData!== null){
+      prevThumbnail = await JSON.parse(thumbnailData);
+    }
+
+    const newThumbnail = blogData.get("newThumbnail") as File;
+    let thumbnail;
+    if(newThumbnail){
+      const bytes = await newThumbnail.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      thumbnail = await uploadFile(buffer);
+      const res = await deleteFile(prevThumbnail.public_id);
+    }
+    
     if ([title, body].some((field) => !field?.trim())) {
       return NextResponse.json(
         { success: false, message: "All fields are required", data: {} },
@@ -59,7 +77,7 @@ export const PATCH = async (req: NextRequest, context: any) => {
     const blog = await Blog.findOneAndUpdate(
       { _id: blogId, postedBy: userId },
       {
-        $set : {title, body}
+        $set : {title, body, thumbnail: thumbnail ? thumbnail : prevThumbnail}
       },
       { new: true }
     );

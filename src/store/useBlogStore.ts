@@ -53,10 +53,17 @@ const blogStore: StateCreator<IBlogState> = (set) => ({
       set({ isLoading: false });
     }
   },
-  updateBlog: async (blog, userId) => {
+  updateBlog: async (blog, userId, thumbnail) => {
     set({ isLoading: true });
     try {
-      const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_END}/api/u/${userId}/b/${blog._id}`, blog);
+      const blogData = new FormData();
+      if(blog.title) blogData.append('title', blog.title);
+      if(blog.body) blogData.append('body', blog.body);
+      if(blog.thumbnail) blogData.append('thumbnail', JSON.stringify(blog.thumbnail));
+      if(thumbnail) blogData.append('newThumbnail', thumbnail);
+      if(blog.isActive) blogData.append('isActive', String(blog.isActive));
+
+      const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_END}/api/u/${userId}/b/${blog._id}`, blogData);
       if(res.data.success) {
         set({ blog: res.data.data });
         return true;
