@@ -70,7 +70,7 @@ export default function SignupPage() {
           description: "Account created successfully. Please Verify your email",
           variant: "default",
         });
-        router.replace("/login");
+        router.replace("/verify/" + email.split("@")[0].trim());
       }
       else {
         toast({

@@ -72,7 +72,7 @@ const Page = () => {
       } else {
         toast({
           title: "Error",
-          description: "Invalid credentials",
+          description: "Invalid credentials or Unverified user",
           variant: "destructive",
         });
       }
